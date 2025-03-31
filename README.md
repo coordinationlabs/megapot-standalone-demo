@@ -12,13 +12,13 @@ This is a demo of the Megapot standalone integration. It is a simple demo that s
 
 This can be adapted to use for any jackpot contract that uses the MEGAPOT contract.  Just update the contract address in /lib/constants.ts
 
-This does not use the UI Kit, you can view that demo at [https://megapot-ui-kit-demo.vercel.app/](https://megapot-ui-kit-demo.vercel.app/) and view the github repo at [https://github.com/coordinationlabs/megapot-ui-kit-demo](https://github.com/coordinationlabs/megapot-ui-kit-demo)
+This does not use the UI Kit, you can view that demo at [https://megapot-standalone-demo.vercel.app/](https://megapot-standalone-demo.vercel.app/) and view the github repo at [https://github.com/coordinationlabs/megapot-standalone-demo](https://github.com/coordinationlabs/megapot-standalone-demo)
 
 ## Getting Started
 
 ```bash
 # Clone the repository
-git clone git@github.com:coordinationlabs/megapot-integration-demo.git
+git clone git@github.com:coordinationlabs/megapot-standalone-demo.git
 
 # Install pnpm
 npm install -g pnpm
@@ -27,7 +27,7 @@ npm install -g pnpm
 pnpm install
 
 # Create a .env.local file and add add your Privy app id
-cp .env.example .env.local
+cp env.example .env.local
 
 # Run the development server
 pnpm run dev

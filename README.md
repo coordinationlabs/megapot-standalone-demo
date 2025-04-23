@@ -14,6 +14,19 @@ This can be adapted to use for any jackpot contract that uses the MEGAPOT contra
 
 This does not use the UI Kit, you can view that demo at [https://megapot-standalone-demo.vercel.app/](https://megapot-standalone-demo.vercel.app/) and view the github repo at [https://github.com/coordinationlabs/megapot-standalone-demo](https://github.com/coordinationlabs/megapot-standalone-demo)
 
+## How to earn 10% of each ticket sold
+
+- Update [./lib/constants.ts](./lib/constants.ts) with your own referral address
+
+How this works:
+
+- The purchaseTickets function that is called when a user purchases a ticket has 3 parameters:
+  - `recipient`: The address of the user purchasing the ticket
+  - `value`: The amount of USDC sent to purchase the tickets (1_000_000 Szabo per ticket)
+  - `referrer`: The address of the referrer (you)
+
+- The referrer address will receive 10% of the ticket price as a referral fee
+
 ## Getting Started
 
 ```bash

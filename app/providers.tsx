@@ -26,8 +26,6 @@ export function Providers({ children }: { children: ReactNode }) {
                     theme: 'light',
                     accentColor: '#02C3A0',
                 },
-                // Explicitly set the default chain for Privy
-                defaultChain: base,
             }}
         >
             <QueryClientProvider client={queryClient}>

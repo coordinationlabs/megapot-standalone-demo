@@ -1,6 +1,8 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
+import { getUsersInfo } from '@/lib/contract';
+import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { BuyTickets } from './jackpot-components/buy-tickets';
 import { Countdown } from './jackpot-components/countdown';
@@ -9,25 +11,26 @@ import { LastJackpot } from './jackpot-components/last-jackpot';
 import { TicketPrice } from './jackpot-components/ticket-price';
 import { WinningOdds } from './jackpot-components/winning-odds';
 import { WithdrawWinnings } from './jackpot-components/withdraw-winnings';
-import { useUsersInfo } from '@/lib/queries';
 
 export function JackpotComponent() {
     const { address, isConnected } = useAccount();
 
-    // Fetch user info here to decide whether to render WithdrawWinnings
-    // WithdrawWinnings itself will also fetch this, but we need it here for conditional rendering.
-    // TanStack Query will deduplicate the request.
-    const { data: userInfo, isLoading: isLoadingUserInfo } = useUsersInfo(address);
-    const hasWinnings = userInfo?.winningsClaimable && userInfo.winningsClaimable > 0n;
+    const [winningsAvailable, setWinningsAvailable] = useState<number>(0);
 
-    // Note: Components like CurrentJackpot, Countdown, TicketPrice, WinningOdds, LastJackpot
-    // now fetch their own data using hooks and don't need props passed from here.
-
+    useEffect(() => {
+        if (!address) return;
+        const fetchWinningsAvailable = async () => {
+            const usersInfo = await getUsersInfo(address);
+            if (!usersInfo) return;
+            const winningsAvailable = usersInfo.winningsClaimable;
+            setWinningsAvailable(Number(winningsAvailable));
+        };
+        fetchWinningsAvailable();
+    }, [address]);
     return (
         <div className="space-y-6">
-            {/* Conditionally render WithdrawWinnings based on fetched userInfo */}
-            {isConnected && address && hasWinnings && !isLoadingUserInfo && (
-                <WithdrawWinnings />
+            {winningsAvailable > 0 && (
+                <WithdrawWinnings winningsAvailable={winningsAvailable} />
             )}
 
             <CurrentJackpot />
@@ -39,10 +42,13 @@ export function JackpotComponent() {
                     <div className="text-center">
                         <TicketPrice />
                         <WinningOdds />
-                        <BuyTickets/>
+                        {isConnected && address && (
+                            <BuyTickets walletAddress={address} />
+                        )}
                     </div>
                 </CardContent>
             </Card>
+
             <LastJackpot />
         </div>
     );

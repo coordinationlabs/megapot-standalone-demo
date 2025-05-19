@@ -1,23 +1,20 @@
-import { useJackpotOdds } from '@/lib/queries';
+import { getJackpotOdds } from '@/lib/contract';
+import { useEffect, useState } from 'react';
 
 export function WinningOdds() {
-    const { data: jackpotOdds, isLoading, error } = useJackpotOdds();
+    const [jackpotOdds, setJackpotOdds] = useState<number | null>(null);
 
-    let content;
-    if (isLoading) {
-        content = "Loading odds...";
-    } else if (error || jackpotOdds === undefined || jackpotOdds === null || jackpotOdds <= 0) {
-        // Handle error or invalid odds (e.g., division by zero if ticket price is 0)
-        content = "Odds: N/A";
-    } else {
-        // Format the odds. Ensure jackpotOdds is treated as a number.
-        const oddsValue = typeof jackpotOdds === 'number' ? jackpotOdds : Number(jackpotOdds);
-        content = `Odds of winning: 1 in ${oddsValue.toFixed(2)}`;
-    }
+    useEffect(() => {
+        const fetchJackpotOdds = async () => {
+            const odds = await getJackpotOdds();
+            setJackpotOdds(odds || null);
+        };
+        fetchJackpotOdds();
+    }, []);
 
     return (
         <p className="text-sm text-gray-500 mb-4">
-            {content}
+            Odds of winning: 1 in {Number(jackpotOdds).toFixed(2)}
         </p>
     );
 }
